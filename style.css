@@ -1,0 +1,267 @@
+/* Mongabay 2026_090: interactive timeline of India's deep-sea fishing policy, compact version.
+   Built to stay under 1,000 px tall at every width, the most WordPress's own iframe resizer allows.
+   Colours, fonts and radii are Mongabay Design System tokens (Blue family for a fisheries story). */
+
+:root {
+  /* type */
+  --font-serif: "Rowan", "Rowan-Regular", Georgia, serif;     /* adjust display font here */
+  --font-sans: "Public Sans", Helvetica, Arial, sans-serif;   /* adjust text font here */
+
+  /* surfaces and ink */
+  --surface: #ffffff;     /* adjust page background here */
+  --panel: #fafafa;       /* chart-panel: adjust panel colour here */
+  --row-hover: #f0f2f2;   /* adjust row hover colour here */
+  --row-active: #e3f0f2;  /* a light wash of sky-blue: adjust the selected row colour here */
+  --ink: #092f29;         /* ink (pine-green): adjust main text colour here */
+  --ink-muted: #738b87;   /* ink-muted: adjust deck, subhead and label colour here */
+  --ink-subtle: #8da39f;  /* adjust source line colour here */
+  --rule: #e4e7e7;        /* adjust the line above the reading card here */
+  --grid: #dde2e2;        /* adjust the decade guide lines here */
+
+  /* Blue family */
+  --date: #1d6572;        /* sapphire-blue-tone: adjust date colour here */
+  --mark: #74adb3;        /* sapphire-blue: adjust the colour of bars and dots here */
+  --mark-active: #1d6572; /* sapphire-blue-tone: adjust the selected bar or dot here */
+  --icon: #1d6572;        /* adjust icon colour here */
+  --highlight: #bee1e5;   /* sky-blue: adjust the highlight under the reporter's key phrases here */
+
+  /* shape */
+  --radius-frame: 10px;   /* adjust panel corner radius here */
+  --focus-ring: 0 0 0 2px #ffffff, 0 0 0 4px #006a54;
+
+  /* marks on the time axis */
+  --bar-h: 8px;           /* adjust bar thickness here */
+  --dot: 10px;            /* adjust single-year dot size here */
+  --arrow: 8px;           /* adjust the arrowhead length on an ongoing period here */
+
+  /* list of periods: date | title | time axis */
+  --c-date: 6.25rem;      /* adjust column widths here */
+  --c-text: 1.25fr;
+  --c-axis: 1fr;
+  --gap: 0.75rem;         /* adjust space between columns here */
+  --pad: 16px;            /* adjust panel inner side padding here */
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--surface);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-size: 16px;  /* adjust base text size here: most sizes below scale with it */
+  line-height: 1.5;
+}
+
+.tl {
+  max-width: 1100px;        /* adjust the widest the graphic gets here */
+  margin: 0 auto;
+  padding: 16px 16px 12px;  /* adjust outer spacing here */
+}
+
+/* ------------------------------------------------------------------ title block */
+.tl-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+.tl-title {
+  margin: 0;
+  font-family: var(--font-serif);
+  font-size: clamp(1.5rem, 2vw + 0.9rem, 2.25rem); /* adjust title size here */
+  font-weight: 400;
+  line-height: 1.1;
+  text-wrap: balance;
+}
+.tl-logo {  /* 0.8 x the title size, the same ratio as the static graphic (40 px mark, 50 px title) */
+  flex: none;
+  width: clamp(1.2rem, 1.6vw + 0.72rem, 1.8rem);  /* adjust logo size here */
+  height: auto;
+  margin-top: 0.2rem;  /* lines the mark up with the top of the capitals, as in the static graphic */
+}
+
+.tl-deck {
+  max-width: 50rem;  /* adjust deck line length here */
+  margin: 0.4rem 0 0.9rem;
+  color: var(--ink-muted);
+  font-size: clamp(0.9375rem, 0.3vw + 0.85rem, 1.0625rem); /* adjust deck size here */
+  line-height: 1.4;
+  text-wrap: pretty;
+}
+
+/* ------------------------------------------------------------------ panel and the list of periods */
+.tl-panel {
+  padding: 2px var(--pad) 0;
+  border-radius: var(--radius-frame);
+  background: var(--panel);
+}
+.tl-navgrid {
+  display: grid;
+  grid-template-columns: var(--c-date) minmax(0, var(--c-text)) minmax(0, var(--c-axis));
+  grid-template-areas: "date text track";
+  column-gap: var(--gap);
+}
+
+/* the time axis: the same box in the header and in every row, so ticks, guides and marks line up */
+.tl-track { grid-area: track; position: relative; }
+.tl-scale { position: absolute; top: 0; bottom: 0; left: 0; right: var(--arrow); }
+
+.tl-axis { height: 1.75rem; }  /* adjust height of the decade-label strip here */
+.tl-tick {
+  position: absolute;
+  bottom: 5px;
+  color: var(--ink-muted);
+  font-size: 0.75rem;         /* adjust decade label size here */
+  line-height: 1;
+  transform: translateX(-50%);
+}
+.tl-axis.is-sparse .tl-tick.is-minor { display: none; }  /* narrow axis: a label every 20 years (set in app.js) */
+
+.tl-guide { position: absolute; top: 0; bottom: 0; width: 0; border-left: 1px dashed var(--grid); }
+
+.tl-bar,
+.tl-dot { position: absolute; top: 50%; background: var(--mark); }
+.tl-bar { height: var(--bar-h); margin-top: calc(var(--bar-h) / -2); border-radius: calc(var(--bar-h) / 2); }
+.tl-dot { width: var(--dot); height: var(--dot); border-radius: 50%; transform: translate(-50%, -50%); }
+.tl-bar.is-ongoing { border-radius: calc(var(--bar-h) / 2) 0 0 calc(var(--bar-h) / 2); }
+.tl-bar.is-ongoing::after {  /* arrowhead: the period is still running */
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 100%;
+  margin-top: -7px;
+  border-top: 7px solid transparent;
+  border-bottom: 7px solid transparent;
+  border-left: var(--arrow) solid var(--mark);
+}
+
+.tl-nav { display: flex; flex-direction: column; }
+.tl-tab {
+  margin: 0 calc(-1 * var(--pad));  /* the row colour runs to the panel edges */
+  padding: 0 var(--pad);
+  border: 0;
+  background: none;
+  color: var(--ink);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.tl-tab:hover { background: var(--row-hover); }
+.tl-tab[aria-selected="true"] { background: var(--row-active); }
+.tl-tab[aria-selected="true"] .tl-bar,
+.tl-tab[aria-selected="true"] .tl-dot { background: var(--mark-active); }
+.tl-tab[aria-selected="true"] .tl-bar.is-ongoing::after { border-left-color: var(--mark-active); }
+.tl-tab:focus-visible { outline: none; box-shadow: inset 0 0 0 2px #006a54; }
+
+.tl-date,
+.tl-name { padding: 5px 0; font-size: 0.9375rem; line-height: 1.3; } /* adjust row height and text size here */
+.tl-date { grid-area: date; color: var(--date); white-space: nowrap; }
+.tl-name { grid-area: text; }
+
+/* ------------------------------------------------------------------ reading card */
+.tl-reader {
+  position: relative;
+  margin: 8px calc(-1 * var(--pad)) 0;
+  padding: 14px var(--pad) 16px;  /* adjust space around the reading card here */
+  border-top: 1px solid var(--rule);
+}
+
+/* every card sits in the same grid cell, so the box is as tall as the longest entry and never jumps */
+.tl-cards { display: grid; }
+.tl-card { grid-area: 1 / 1; visibility: hidden; }
+.tl-card.is-active { visibility: visible; }
+
+.tl-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 32px;
+  padding-right: 8.5rem;  /* room for the arrows at the top right */
+  color: var(--date);
+  font-size: 1rem;        /* adjust card date size here */
+}
+.tl-meta svg { flex: none; width: 22px; height: 22px; color: var(--icon); } /* adjust card icon size here */
+.tl-card-title { margin: 4px 0 0; font-size: 1.25rem; font-weight: 400; line-height: 1.25; } /* adjust card title size here */
+.tl-card-sub { margin: 2px 0 0; color: var(--ink-muted); font-size: 0.9375rem; line-height: 1.35; } /* adjust subhead size here */
+.tl-card-body {
+  max-width: 46rem;   /* adjust body line length here */
+  margin: 8px 0 0;
+  font-size: 1rem;    /* adjust body text size here */
+  line-height: 1.5;
+}
+.tl-card-body mark {  /* the reporter's key phrases: a highlighter band over the lower half of the text */
+  background: linear-gradient(to bottom, transparent 55%, var(--highlight) 55%, var(--highlight) 90%, transparent 90%);
+  color: inherit;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+
+/* previous / next */
+.tl-step {
+  position: absolute;
+  top: 14px;
+  right: var(--pad);
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.tl-count {
+  min-width: 3.25rem;
+  color: var(--ink-muted);
+  font-size: 0.8125rem;  /* adjust counter size here */
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+.tl-arrow {
+  display: grid;
+  place-items: center;
+  width: 32px;   /* adjust arrow button size here */
+  height: 32px;
+  padding: 0;
+  border: 1px solid var(--ink);
+  border-radius: 50%;
+  background: var(--surface);
+  color: var(--ink);
+  cursor: pointer;
+}
+.tl-arrow svg { width: 16px; height: 16px; }
+.tl-arrow:hover { background: var(--row-hover); }
+.tl-arrow:disabled { border-color: var(--rule); color: var(--rule); cursor: default; background: var(--surface); }
+.tl-arrow:focus-visible { outline: none; box-shadow: var(--focus-ring); }
+
+/* ------------------------------------------------------------------ source and fallback */
+.tl-foot { margin-top: 8px; color: var(--ink-subtle); font-size: 0.8125rem; line-height: 1.4; } /* adjust footer size here */
+.tl-foot p { margin: 0; }
+.tl-fallback { display: block; width: 100%; height: auto; }
+.no-js .tl-head, .no-js .tl-deck, .no-js .tl-panel, .no-js .tl-foot { display: none; } /* no JavaScript: static graphic only */
+
+.tl-sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* ------------------------------------------------------------------ phones: the list becomes a date-labelled strip chart */
+@media (max-width: 719px) {
+  :root {
+    --c-date: 5.5rem;  /* adjust phone date column here */
+    --gap: 0.5rem;
+    --bar-h: 7px;
+    --dot: 9px;
+  }
+  .tl-navgrid {
+    grid-template-columns: var(--c-date) minmax(0, 1fr);
+    grid-template-areas: "date track";
+  }
+  .tl-name { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); } /* titles are in the card */
+  .tl-date { padding: 2px 0; font-size: 0.8125rem; }  /* adjust phone row height here */
+  .tl-axis { height: 1.5rem; }
+  .tl-card-title { font-size: 1.0625rem; }
+  .tl-card-sub { font-size: 0.875rem; }
+  .tl-card-body { font-size: 0.9375rem; line-height: 1.45; }
+}

@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Measure the timeline's height at every column width</title>
+</head>
+<body>
+<pre id="out">Measuring…</pre>
+<script>
+/* Loads the timeline in same-origin frames at every column width a Mongabay article can give it (276–780 px) and
+   records its natural height (not the fill mode). Each width is measured twice, with Rowan and with Georgia (what
+   the title falls back to if Rowan can't load), and the taller of the two is kept.
+   Serve the repo root (python3 -m http.server), open /dev/measure.html, save the JSON it prints as dev/heights.json,
+   then run python3 dev/embed_shortcode.py. */
+(async function () {
+  var out = {}, pre = document.getElementById("out");
+  for (var w = 276; w <= 780; w += 2) {
+    var f = document.createElement("iframe");
+    f.style.cssText = "width:" + w + "px;height:1200px;border:0;display:block";
+    f.src = "../index.html?measure=" + w;
+    document.body.appendChild(f);
+    await new Promise(function (r) { f.onload = r; });
+    var doc = f.contentDocument;
+    await doc.fonts.ready;
+    await new Promise(function (r) { setTimeout(r, 60); });
+    var h = Math.ceil(doc.getElementById("tl").getBoundingClientRect().height);
+    var s = doc.createElement("style");
+    s.textContent = ".tl-title { font-family: Georgia, serif !important; }";
+    doc.head.appendChild(s);
+    await new Promise(function (r) { setTimeout(r, 30); });
+    out[w] = Math.max(h, Math.ceil(doc.getElementById("tl").getBoundingClientRect().height));
+    f.remove();
+    pre.textContent = "Measuring… " + w + " px";
+  }
+  pre.textContent = JSON.stringify(out);
+  window.heights = out;
+})();
+</script>
+</body>
+</html>

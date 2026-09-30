@@ -2,6 +2,17 @@
    Built to stay under 1,000 px tall at every width, the most WordPress's own iframe resizer allows.
    Colours, fonts and radii are Mongabay Design System tokens (Blue family for a fisheries story). */
 
+/* Rowan: the installed font if there is one, otherwise Mongabay's own theme copy (served to any site) */
+@font-face {
+  font-family: "Rowan";
+  src: local("Rowan"), local("Rowan-Regular"),
+       url("https://news.mongabay.com/wp-content/themes/mongabay_v2/fonts/Rowan-Regular.woff2") format("woff2"),
+       url("https://news.mongabay.com/wp-content/themes/mongabay_v2/fonts/Rowan-Regular.woff") format("woff");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
 :root {
   /* type */
   --font-serif: "Rowan", "Rowan-Regular", Georgia, serif;     /* adjust display font here */
@@ -137,6 +148,14 @@ body {
 }
 
 .tl-nav { display: flex; flex-direction: column; }
+
+/* ?fill=1 (the WordPress shortcode): fill the frame's height. The shortcode's height formula runs a little generous,
+   and the spare pixels are shared out between the rows of the list instead of showing as a gap at the bottom. */
+.is-fill .tl { display: flex; flex-direction: column; min-height: 100vh; }
+.is-fill .tl-panel { flex: 1 0 auto; display: flex; flex-direction: column; }
+.is-fill .tl-nav { flex: 1 0 auto; }
+.is-fill .tl-tab { flex: 1 0 auto; align-items: center; }
+.is-fill .tl-track { align-self: stretch; }
 .tl-tab {
   margin: 0 calc(-1 * var(--pad));  /* the row colour runs to the panel edges */
   padding: 0 var(--pad);

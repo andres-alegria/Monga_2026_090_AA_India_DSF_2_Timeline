@@ -7,6 +7,8 @@
   "use strict";
 
   document.documentElement.classList.remove("no-js"); // the static fallback is for browsers without JavaScript
+  // ?fill=1: the WordPress shortcode sets the frame's height with a CSS formula; the timeline stretches to fill it
+  if (/[?&]fill=1(&|$)/.test(location.search)) document.documentElement.classList.add("is-fill");
 
   var C = window.DSF_TIMELINE;
   var ICONS = window.DSF_ICONS;

@@ -69,6 +69,7 @@ body {
   margin: 0 auto;
   padding: 16px 16px 12px;  /* adjust outer spacing here */
 }
+.is-embedded .tl { padding: 6px 0 1px; } /* in an article: flush with the story text, like 089 (adjust embedded spacing here; 6 px keeps the title's ascenders inside the frame) */
 
 /* ------------------------------------------------------------------ title block */
 .tl-head {
@@ -210,7 +211,12 @@ body {
   line-height: 1.5;
 }
 .tl-card-body mark {  /* the reporter's key phrases: a highlighter band over the lower half of the text */
-  background: linear-gradient(to bottom, transparent 55%, var(--highlight) 55%, var(--highlight) 90%, transparent 90%);
+  /* one solid colour, no transparent stops: PDF export turns a transparent gradient stop into black */
+  background-color: transparent;
+  background-image: linear-gradient(var(--highlight), var(--highlight));
+  background-repeat: no-repeat;
+  background-size: 100% 0.4em;    /* adjust highlight thickness here */
+  background-position: 0 88%;     /* adjust highlight height on the line here */
   color: inherit;
   -webkit-box-decoration-break: clone;
   box-decoration-break: clone;

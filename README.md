@@ -25,8 +25,9 @@ shortcode's `style` works it out with a CSS formula:
 - it gives a height a few pixels taller than the timeline needs at that width.
 
 `?fill=1` in the URL makes the timeline stretch to fill the frame. The spare pixels are shared out between the rows
-of the list, so they don't show as a gap. On 30 Sep 2026 it was checked from 320 to 1,600 px screen widths:
-- the spare is at most 41 px (3.7 px per row), and 5 px on desktop;
+of the list, so they don't show as a gap. Inside an iframe the page also drops its side padding, so the title, panel
+and source line up with the story text, as in 089. On 30 Sep 2026 it was checked from 320 to 1,600 px screen widths:
+- the spare is at most 43 px (3.9 px per row), and 4 px on desktop;
 - nothing overflows;
 - 40 px to the next paragraph, as with Mongabay's figures.
 

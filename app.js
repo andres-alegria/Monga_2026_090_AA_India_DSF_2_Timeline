@@ -7,6 +7,8 @@
   "use strict";
 
   document.documentElement.classList.remove("no-js"); // the static fallback is for browsers without JavaScript
+  // in an article's iframe: style.css drops the side padding, so the timeline lines up with the story text (as 089 does)
+  if (window.parent !== window) document.documentElement.classList.add("is-embedded");
   // ?fill=1: the WordPress shortcode sets the frame's height with a CSS formula; the timeline stretches to fill it
   if (/[?&]fill=1(&|$)/.test(location.search)) document.documentElement.classList.add("is-fill");
 

@@ -1,7 +1,8 @@
 // Editorial text for the timeline: the one source for both the web version (app.js) and the static graphic
 // (../output/fig1_build.py). Keep the object after the = sign valid JSON: no comments or trailing commas inside it.
 //
-// Every title, subhead and body is verbatim from "Deep sea fisheries policy changes timeline.docx".
+// Every title, subhead and body is verbatim from "Deep sea fisheries policy changes timeline_v2.docx" (6 Oct 2026).
+// An empty subhead ("") means the entry has none.
 // **double asterisks** mark the phrases the reporter set in bold; the web version highlights them.
 // start / end: first and last year of the period, inclusive. "ongoing": true draws the bar to the end of the axis.
 // icon: a Phosphor icon name from assets/icons.js.
@@ -30,25 +31,34 @@ window.DSF_TIMELINE = {
       "icon": "engine",
       "title": "Mechanisation begins",
       "subhead": "India looks beyond traditional fishing",
-      "body": "The government promotes **mechanisation of indigenous fishing vessels** and exploratory fishing to increase catches and exports. The Indo-Norwegian Project and FAO support the introduction of new vessel designs, including small mechanised boats and larger specialised vessels. Over time, the approach shifts towards **more intensive, export-oriented fishing**, including bottom trawling and onboard freezing."
+      "body": "The government promotes **mechanisation of indigenous fishing vessels** and exploratory fishing to increase catches and exports. The Indo-Norwegian Project and FAO support the introduction of new vessel designs, including small mechanised boats and larger specialised vessels. Penaid prawn is recognised as an important item for export. Over time, the approach shifts towards **more intensive, export-oriented fishing**, including bottom trawling and onboard freezing."
     },
     {
-      "date": "1969",
+      "date": "1969–1974",
       "start": 1969,
-      "end": 1969,
+      "end": 1974,
       "icon": "handshake",
-      "title": "Foreign partnerships enter the picture",
+      "title": "Enter foreign partnerships",
       "subhead": "Indian firms are encouraged to bring in foreign vessels",
-      "body": "Fishing is designated a priority area for **foreign collaboration**. Indian companies are encouraged to lease or import foreign fishing vessels to expand production and participate in the export trade."
+      "body": "Fishing is designated a priority area for **foreign collaboration**. Indian companies are encouraged to lease or import foreign fishing vessels to expand production and participate in the export trade. Deep Sea Fishing Station is renamed Exploratory Fisheries Project in 1974."
     },
     {
-      "date": "1970s–80s",
-      "start": 1970,
-      "end": 1989,
+      "date": "1975–79",
+      "start": 1975,
+      "end": 1979,
       "icon": "flag",
       "title": "Foreign vessels enter India’s EEZ",
       "subhead": "Technology transfer becomes a policy objective",
-      "body": "After India establishes its **200-nautical-mile Exclusive Economic Zone (EEZ)** in 1976, foreign-flagged vessels are allowed to fish in Indian waters through licences and partnerships. Joint ventures are promoted to bring in **technology, resource surveys and fishing expertise**, while helping Indian enterprises enter the export market."
+      "body": "After India establishes its **200-nautical-mile Exclusive Economic Zone (EEZ)** in 1976, foreign-flagged vessels are allowed to fish in Indian waters through licences and partnerships. The first deep-sea policy in 1977 provided for chartering arrangements with foreign operators. Private entrepreneurs are permitted to import trawlers."
+    },
+    {
+      "date": "1980–1985",
+      "start": 1980,
+      "end": 1985,
+      "icon": "gavel",
+      "title": "Regularising foreign fishing vessels in Indian waters",
+      "subhead": "",
+      "body": "Maritime Zones of India (Regulation of Fishing by Foreign Vessels) Act, 1981 regulates foreign vessels operating in Indian waters. Exploratory Fisheries Project is renamed the Fishery Survey of India (1983). Joint ventures are promoted to bring in **technology, resource surveys and fishing expertise**, while helping Indian enterprises enter the export market."
     },
     {
       "date": "1985–96",
@@ -69,20 +79,29 @@ window.DSF_TIMELINE = {
       "body": "As part of wider economic reforms, India introduces a new **Deep Sea Fishing Policy**. It allows foreign vessels to operate through leasing arrangements, permits foreign test fishing and promotes **49:51 foreign-Indian joint ventures** covering fishing, processing and marketing. Around **400 vessels receive valid permits** under the policy."
     },
     {
-      "date": "1994–96",
-      "start": 1994,
-      "end": 1996,
+      "date": "1992–97",
+      "start": 1992,
+      "end": 1997,
       "icon": "megaphone",
       "title": "Fisher protests force a rethink",
       "subhead": "Foreign vessels face growing opposition",
-      "body": "Millions of fishers and fish workers mobilise against the policy, arguing that foreign and larger vessels could cause **encroachment on fishing grounds, over-exploitation and damage to fishing gear and craft**. Following a government review and sustained protests, the 1991 Deep Sea Fishing Policy is **repealed**."
+      "body": "Millions of fishers and fish workers mobilise against the policy, arguing that foreign and larger vessels could cause **encroachment on fishing grounds, over-exploitation and damage to fishing gear and craft**. Following sustained protests and recommendations of the **P. Murari Committee Report**, the 1991 Deep Sea Fishing Policy is rescinded. Foreign fishing under these schemes ends."
+    },
+    {
+      "date": "1997–2002",
+      "start": 1997,
+      "end": 2002,
+      "icon": "file-dashed",
+      "title": "Policy vacuum",
+      "subhead": "",
+      "body": "By the end of 2003, the sector had evolved without a settled deep-sea policy."
     },
     {
       "date": "2004",
       "start": 2004,
       "end": 2004,
       "icon": "boat",
-      "title": "India turns towards an indigenous fleet",
+      "title": "India turns towards a domestic fleet",
       "subhead": "Resource-specific vessels replace broad foreign collaboration",
       "body": "The Comprehensive Policy on Marine Fisheries promotes **Indian-owned, resource-specific vessels** for deep-sea species such as tuna and squid. It also provides incentives for wholly Indian-owned vessels to venture into **international waters** and pursue fishing arrangements with other nations."
     },
@@ -100,7 +119,7 @@ window.DSF_TIMELINE = {
       "start": 2017,
       "end": 2017,
       "icon": "users-three",
-      "title": "Build India’s own deep-sea fleet",
+      "title": "Push for an indigenous deep-sea fleet",
       "subhead": "Fishers and indigenous capacity take centre stage",
       "body": "The National Policy on Marine Fisheries promotes the **modernisation of existing indigenous vessels** and the introduction of new deep-sea fishing vessels. It specifically encourages participation through **fisher cooperatives and self-help groups**, marking a renewed emphasis on domestic capacity."
     },

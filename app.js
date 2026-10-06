@@ -121,7 +121,7 @@
     card.innerHTML =
       '<div class="tl-meta">' + svg(ICONS[e.icon]) + "<span>" + esc(e.date) + "</span></div>" +
       '<h2 class="tl-card-title">' + esc(e.title) + "</h2>" +
-      '<p class="tl-card-sub">' + esc(e.subhead) + "</p>" +
+      (e.subhead ? '<p class="tl-card-sub">' + esc(e.subhead) + "</p>" : "") + // some entries have no subhead
       '<p class="tl-card-body">' + rich(e.body) + "</p>";
     cards.appendChild(card);
     panels.push(card);

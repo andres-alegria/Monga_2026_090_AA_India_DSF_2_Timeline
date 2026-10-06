@@ -19,6 +19,7 @@ The formula is fitted here from the measurements, so it follows the content when
 """
 import json
 import os
+import re
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
@@ -37,8 +38,18 @@ def col(vw):
 LAYOUT_SWITCH = 719   # style.css: the phone layout applies up to a 719 px wide frame
 MARGIN = 6            # px added everywhere, so rounding and font differences never leave the timeline short
 LATE_WRAP = 8         # px: allow for a browser wrapping text up to this much later (wider) than the measurements
+SCROLLBAR = 17        # px: Windows desktop browsers count the scrollbar in 100vw, so the formula sees a column this
+                      # much wider than the real one; without this, a re-wrap step in that band leaves the frame short
+SCROLLBAR_FROM = 560  # px of column (a screen of about 624 px): below it only phones are likely, and phones have no
+                      # such scrollbar, so the allowance would only add spare height there
 MERGE_TOL = 12        # px of extra spare allowed when merging segments, to keep the formula short
 STEEP = 100000        # makes a ramp into a step: the full jump is reached within a fraction of a pixel
+
+
+def load_rows():
+    """The timeline's entries, from content.js (the list has one row each)."""
+    src = open(os.path.join(ROOT, "content.js"), encoding="utf-8").read()
+    return json.loads(re.search(r"=\s*(\{.*\})\s*;\s*$", src, re.S).group(1))["events"]
 
 
 def needed_fn(heights):
@@ -92,9 +103,11 @@ def fit(needed, lo, hi, step=0.5):
 
 
 def late(needed):
-    """needed(), assuming each re-wrap happens up to LATE_WRAP px later; the layout switch itself is exact."""
+    """needed(), assuming each re-wrap happens up to LATE_WRAP px later (plus SCROLLBAR px in columns where a desktop
+    window is plausible); the layout switch itself is exact."""
     def f(c):
-        side = [c - d * 0.5 for d in range(int(LATE_WRAP * 2) + 1)]
+        back = LATE_WRAP + (SCROLLBAR if c >= SCROLLBAR_FROM else 0)
+        side = [c - d * 0.5 for d in range(int(back * 2) + 1)]
         return max(needed(x) for x in side if (x <= LAYOUT_SWITCH) == (c <= LAYOUT_SWITCH))
     return f
 
@@ -109,7 +122,7 @@ def build(heights):
     for i in range(2 * (LAYOUT_SWITCH + 1), 2 * 780 + 1):
         x = i / 2
         if needed(x + 0.5) < last:
-            wide_steps.append((x + 0.25, last - needed(x + 0.5)))
+            wide_steps.append((x + 0.5, last - needed(x + 0.5)))   # at the width where the lower height applies
             last = needed(x + 0.5)
     return phone, y_phone_end, wide_start, wide_steps
 
@@ -153,12 +166,17 @@ def main():
 
     bands = [(320, 359, "small phones"), (360, 430, "phones"), (431, 714, "large phones, small tablets"),
              (715, 859, "tablets, small windows"), (860, 1600, "desktop")]
+    rows = len(load_rows())
+    measured = needed_fn(heights)
     worst = None
-    print("spare height (formula minus timeline), px")
+    print(f"spare height (formula minus the timeline as measured), px, shared by {rows} rows")
     for lo, hi, label in bands:
-        spare = [height(col(vw), checked) - needed(col(vw)) for vw in range(lo, hi + 1)]
-        worst = min(spare) if worst is None else min(worst, min(spare))
-        print(f"  {label:28s} {lo}–{hi}: {min(spare):5.1f} to {max(spare):5.1f}  (up to {max(spare) / 11:.1f} per row)")
+        cs = [col(vw) for vw in range(lo, hi + 1)]
+        worst_case = min(height(c, checked) - needed(c) for c in cs)        # with late wraps and a Windows scrollbar
+        spare = [height(c, checked) - measured(c) for c in cs]              # what most readers get
+        worst = worst_case if worst is None else min(worst, worst_case)
+        print(f"  {label:28s} {lo}–{hi}: {min(spare):5.1f} to {max(spare):5.1f}  (up to {max(spare) / rows:.1f} per row;"
+              f" {worst_case:4.1f} at worst)")
     if worst < 0:
         print(f"  ! the formula is up to {-worst:.1f} px short somewhere")
         raise SystemExit(1)

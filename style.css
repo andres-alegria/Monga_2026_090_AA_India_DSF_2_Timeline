@@ -47,7 +47,7 @@
 
   /* list of periods: date | title | time axis */
   --c-date: 6.25rem;      /* adjust column widths here */
-  --c-text: 1.25fr;
+  --c-text: 1.5fr;         /* wide enough for the longest title on one line in a 780 px article column */
   --c-axis: 1fr;
   --gap: 0.75rem;         /* adjust space between columns here */
   --pad: 16px;            /* adjust panel inner side padding here */
